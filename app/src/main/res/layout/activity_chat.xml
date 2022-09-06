@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ChatActivity">
+    tools:context=".ChatActivity"
+    android:id="@+id/chatContainer">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messagesRecycler"
@@ -13,7 +14,7 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/inputLayout"
-        android:layout_weight="1">
+        android:layout_marginBottom="40dp">
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
@@ -39,4 +40,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
