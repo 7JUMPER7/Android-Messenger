@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
-    private static String BASE_URL = "https://reqres.in";
+    private static String BASE_URL = "https://telemost-server.herokuapp.com";
 
     public static Retrofit getInstance() {
         if(retrofit == null) {

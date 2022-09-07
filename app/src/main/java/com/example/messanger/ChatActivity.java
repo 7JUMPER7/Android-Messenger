@@ -13,8 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.messanger.API.APIController;
-import com.example.messanger.API.Methods;
-import com.example.messanger.API.Model;
+import com.example.messanger.API.MessageModel;
 import com.example.messanger.Messages.DataAdapter;
 import com.example.messanger.Sidebar.SidebarFragment;
 
@@ -40,21 +39,21 @@ public class ChatActivity extends AppCompatActivity {
 //        messages.add("Test message 2");
 //        messages.add("Test message 3");
 
-        Call<Model> call = APIController.getNames();
-        call.enqueue(new Callback<Model>() {
+        Call<ArrayList<MessageModel>> call = APIController.getMessages();
+        call.enqueue(new Callback<ArrayList<MessageModel>>() {
             @Override
-            public void onResponse(Call<Model> call, Response<Model> response) {
-                ArrayList<Model.data> data = response.body().getData();
+            public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
+                ArrayList<MessageModel> data = response.body();
 
-                for(Model.data elem : data) {
-                    messages.add(elem.getFirst_name());
+                for(MessageModel message : data) {
+                    messages.add(message.getText());
                 }
 
                 updateMessages();
             }
 
             @Override
-            public void onFailure(Call<Model> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MessageModel>> call, Throwable t) {
                 Log.e("ERROR", "onFailure: " + t.getMessage());
             }
         });

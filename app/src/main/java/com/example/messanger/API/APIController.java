@@ -3,13 +3,11 @@ package com.example.messanger.API;
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class APIController {
-    public static Call<Model> getNames() {
+    public static Call<ArrayList<MessageModel>> getMessages() {
         Methods methods = RetrofitClient.getInstance().create(Methods.class);
-        Call<Model> call = methods.getAllData();
+        Call<ArrayList<MessageModel>> call = methods.getAllMessages();
         return call;
     }
 }
