@@ -1,92 +1,79 @@
 package com.example.messanger.API;
 
-import java.util.ArrayList;
+public class MessageModel {
+    String id;
+    String text;
+    String createdAt;
+    String updatedAt;
+    String userId;
+    User user;
 
-//public class MessagesModel {
-//    ArrayList<MessageModel> messages;
-//
-//    public ArrayList<MessageModel> getMessages() {
-//        return messages;
-//    }
-//    public void setMessages(ArrayList<MessageModel> messages) {
-//        this.messages = messages;
-//    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public class MessageModel {
-        String id;
-        String text;
-        String createdAt;
-        String updatedAt;
-        String userId;
-        User user;
+    public String getText() {
+        return text;
+    }
+    public void setText(String text) {
+        this.text = text;
+    }
 
-        public String getId() {
-            return id;
-        }
-        public void setId(String id) {
-            this.id = id;
-        }
+    public String getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
-        public String getText() {
-            return text;
-        }
-        public void setText(String text) {
-            this.text = text;
-        }
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-        public String getCreatedAt() {
-            return createdAt;
-        }
-        public void setCreatedAt(String createdAt) {
-            this.createdAt = createdAt;
-        }
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-        public String getUpdatedAt() {
-            return updatedAt;
-        }
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
-        }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-        public String getUserId() {
-            return userId;
-        }
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
+    public class User {
+        String name;
+        String login;
+        Boolean isOnline;
 
-        public User getUser() {
-            return user;
+        public String getName() {
+            return name;
         }
-        public void setUser(User user) {
-            this.user = user;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public class User {
-            String name;
-            String login;
-            Boolean isOnline;
+        public String getLogin() {
+            return login;
+        }
+        public void setLogin(String login) {
+            this.login = login;
+        }
 
-            public String getName() {
-                return name;
-            }
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getLogin() {
-                return login;
-            }
-            public void setLogin(String login) {
-                this.login = login;
-            }
-
-            public Boolean getOnline() {
-                return isOnline;
-            }
-            public void setOnline(Boolean online) {
-                isOnline = online;
-            }
+        public Boolean getOnline() {
+            return isOnline;
+        }
+        public void setOnline(Boolean online) {
+            isOnline = online;
         }
     }
-//}
+}

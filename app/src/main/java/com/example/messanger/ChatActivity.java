@@ -32,24 +32,23 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);// set drawable icon
+        // set drawable icon
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        messages.add("Test message 1");
-//        messages.add("Test message 2");
-//        messages.add("Test message 3");
-
+        // get chat messages
         Call<ArrayList<MessageModel>> call = APIController.getMessages();
         call.enqueue(new Callback<ArrayList<MessageModel>>() {
             @Override
             public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
                 ArrayList<MessageModel> data = response.body();
 
-                for(MessageModel message : data) {
-                    messages.add(message.getText());
+                if(data != null) {
+                    for(MessageModel message : data) {
+                        messages.add(message.getText());
+                    }
+                    updateMessages();
                 }
-
-                updateMessages();
             }
 
             @Override

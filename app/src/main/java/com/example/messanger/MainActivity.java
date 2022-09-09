@@ -16,15 +16,15 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-//        if(extras != null) {
-//
-//        } else {
-//            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
-//            isFirstLoad = false;
-//            startActivity(login);
-//        }
+        if(extras != null) {
 
-        Intent chat = new Intent(getApplicationContext(), ChatActivity.class);
-        startActivity(chat);
+        } else {
+            Intent login = new Intent(getApplicationContext(), LoginActivity.class);
+            isFirstLoad = false;
+            startActivity(login);
+        }
+
+//        Intent chat = new Intent(getApplicationContext(), ChatActivity.class);
+//        startActivity(chat);
     }
 }
