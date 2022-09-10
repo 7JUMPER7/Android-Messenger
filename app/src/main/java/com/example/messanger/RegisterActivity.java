@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.messanger.API.APIController;
 import com.example.messanger.API.RegisterResponse;
+import com.example.messanger.DB.DatabaseAdapter;
+import com.example.messanger.DB.UserEntity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -22,11 +24,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
+    DatabaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        adapter = new DatabaseAdapter(this);
     }
 
     public void register(View view) {
@@ -50,6 +55,17 @@ public class RegisterActivity extends AppCompatActivity {
 
                 Toast.makeText(RegisterActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
                 Log.d("TEST", "onResponse: " + registerResponse.getName());
+
+                UserEntity newUser = new UserEntity(registerResponse.getName(), registerResponse.getLogin(), registerResponse.getPassword());
+
+                // Save to DB
+                adapter.open();
+                adapter.insert(newUser);
+                adapter.close();
+
+                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                main.putExtra("from", "register");
+                startActivity(main);
             }
 
             @Override
@@ -58,9 +74,5 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.e("REGISTER", "onFailure: " + t.getMessage());
             }
         });
-
-        Intent main = new Intent(getApplicationContext(), MainActivity.class);
-        main.putExtra("from", "register");
-        startActivity(main);
     }
 }
