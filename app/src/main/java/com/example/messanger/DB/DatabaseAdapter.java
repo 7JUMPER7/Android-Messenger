@@ -33,7 +33,7 @@ public class DatabaseAdapter {
         return DatabaseUtils.queryNumEntries(database, DatabaseHelper.TABLE);
     }
 
-    public UserEntity getEntity(){
+    public UserEntity getEntity() {
         UserEntity entity = null;
         String query = String.format("SELECT * FROM %s LIMIT 1", DatabaseHelper.TABLE);
         Cursor cursor = database.rawQuery(query, new String[]{ });
@@ -47,7 +47,8 @@ public class DatabaseAdapter {
         return  entity;
     }
 
-    public long insert(UserEntity entity){
+    public long insert(UserEntity entity) {
+        delete(entity.getLogin());
 
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.NAME, entity.getName());
@@ -57,15 +58,13 @@ public class DatabaseAdapter {
         return  database.insert(DatabaseHelper.TABLE, null, cv);
     }
 
-    public long delete(String entityLogin){
-
+    public long delete(String entityLogin) {
         String whereClause = dbHelper.LOGIN + " = ?";
         String[] whereArgs = new String[]{entityLogin};
         return database.delete(DatabaseHelper.TABLE, whereClause, whereArgs);
     }
 
-    public long update(UserEntity entity){
-
+    public long update(UserEntity entity) {
         String whereClause = DatabaseHelper.LOGIN + "=" + entity.getLogin();
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.NAME, entity.getName());

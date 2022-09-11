@@ -7,6 +7,9 @@ public class MessageModel {
     String updatedAt;
     String userId;
     User user;
+    Boolean isUserMessage;
+
+    public MessageModel() { }
 
     public String getId() {
         return id;
@@ -48,6 +51,13 @@ public class MessageModel {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getUserMessage() {
+        return isUserMessage;
+    }
+    public void setUserMessage(Boolean userMessage) {
+        isUserMessage = userMessage;
     }
 
     public class User {

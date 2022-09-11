@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +38,16 @@ public class RegisterActivity extends AppCompatActivity {
         TextView loginText = findViewById(R.id.loginInput);
         TextView passwordText = findViewById(R.id.passwordInput);
 
-        Call<RegisterResponse> call = APIController.register(loginText.getText().toString(), passwordText.getText().toString(), nameText.getText().toString());
+        String login = loginText.getText().toString();
+        String password = passwordText.getText().toString();
+        String name = nameText.getText().toString();
+
+        if(login.equals("") || password.equals("") || name.equals("")) {
+            Toast.makeText(getApplicationContext(), "All fields should be passed!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Call<RegisterResponse> call = APIController.register(login, password, name);
         call.enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
@@ -53,15 +61,14 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                Toast.makeText(RegisterActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
-                Log.d("TEST", "onResponse: " + registerResponse.getName());
-
                 UserEntity newUser = new UserEntity(registerResponse.getName(), registerResponse.getLogin(), registerResponse.getPassword());
 
                 // Save to DB
                 adapter.open();
                 adapter.insert(newUser);
                 adapter.close();
+
+                Toast.makeText(RegisterActivity.this, "Successfully registered!", Toast.LENGTH_LONG).show();
 
                 Intent main = new Intent(getApplicationContext(), MainActivity.class);
                 main.putExtra("from", "register");

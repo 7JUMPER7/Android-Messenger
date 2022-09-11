@@ -9,10 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.messanger.R;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
-    TextView message;
+    TextView otherMessageText;
+    TextView userMessageText;
 
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
-        message = itemView.findViewById(R.id.userMessage);
+        otherMessageText = itemView.findViewById(R.id.otherMessageText);
+        userMessageText = itemView.findViewById(R.id.userMessageText);
     }
 }

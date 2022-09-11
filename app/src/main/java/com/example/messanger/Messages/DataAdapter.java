@@ -4,19 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.messanger.API.MessageModel;
 import com.example.messanger.R;
 
 import java.util.ArrayList;
 
 public class DataAdapter extends RecyclerView.Adapter<ViewHolder> {
-    ArrayList<String> messages;
+    ArrayList<MessageModel> messages;
     LayoutInflater inflater;
 
-    public DataAdapter(Context context, ArrayList<String> messages) {
+    public DataAdapter(Context context, ArrayList<MessageModel> messages) {
         this.messages = messages;
         this.inflater = LayoutInflater.from(context);
     }
@@ -30,8 +32,17 @@ public class DataAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String msg = messages.get(position);
-        holder.message.setText(msg);
+        MessageModel msg = messages.get(position);
+
+        if(msg.getUserMessage() == true) {
+            holder.itemView.findViewById(R.id.otherMessageContainer).setVisibility(View.GONE);
+            holder.itemView.findViewById(R.id.userMessageContainer).setVisibility(View.VISIBLE);
+            holder.userMessageText.setText(msg.getText());
+        } else {
+            holder.itemView.findViewById(R.id.otherMessageContainer).setVisibility(View.VISIBLE);
+            holder.itemView.findViewById(R.id.userMessageContainer).setVisibility(View.GONE);
+            holder.otherMessageText.setText(msg.getText());
+        }
     }
 
     @Override
