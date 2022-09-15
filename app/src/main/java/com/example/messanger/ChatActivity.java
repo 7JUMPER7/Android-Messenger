@@ -14,14 +14,18 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.messanger.API.APIController;
+import com.example.messanger.API.LoginResponse;
 import com.example.messanger.API.MessageModel;
 import com.example.messanger.API.SetOnlineResponse;
 import com.example.messanger.DB.DatabaseAdapter;
 import com.example.messanger.DB.UserEntity;
 import com.example.messanger.Messages.DataAdapter;
 import com.example.messanger.Sidebar.SidebarFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -122,12 +126,35 @@ public class ChatActivity extends AppCompatActivity {
             return;
         }
 
-        MessageModel newMessage = new MessageModel();
-        newMessage.setText(message);
 
-        messages.add(newMessage);
+        databaseAdapter.open();
+        UserEntity user = databaseAdapter.getEntity();
+        databaseAdapter.close();
+
+        MessageModel newMessage = new MessageModel(message, user.getLogin());
+        newMessage.setUserMessage(true);
+        Call<MessageModel> call = APIController.sendMessage(newMessage);
+        call.enqueue(new Callback<MessageModel>() {
+            @Override
+            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                MessageModel data = response.body();
+
+//                if(data != null) {
+//                    messages.add(data);
+//                    updateMessages();
+//                }
+
+                messages.add(newMessage);
+                updateMessages();
+            }
+
+            @Override
+            public void onFailure(Call<MessageModel> call, Throwable t) {
+                Log.d("ERROR", "sendMessage: " + t.getMessage());
+            }
+        });
+
         textInput.setText("");
-        updateMessages();
     }
 
     public void logout(View view) {

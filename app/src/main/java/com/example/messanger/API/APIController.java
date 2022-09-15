@@ -36,4 +36,11 @@ public class APIController {
         Call<SetOnlineResponse> call = methods.setUserOnline(online);
         return call;
     }
+
+    public static Call<MessageModel> sendMessage(MessageModel message) {
+        Methods methods = RetrofitClient.getInstance().create(Methods.class);
+
+        Call<MessageModel> call = methods.sendMessage(message);
+        return call;
+    }
 }

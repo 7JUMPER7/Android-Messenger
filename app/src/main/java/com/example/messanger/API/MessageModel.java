@@ -11,6 +11,12 @@ public class MessageModel {
 
     public MessageModel() { }
 
+    public MessageModel(String text, String login) {
+        this.text = text;
+        this.user = new User();
+        this.user.setLogin(login);
+    }
+
     public String getId() {
         return id;
     }

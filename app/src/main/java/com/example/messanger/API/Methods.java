@@ -21,4 +21,7 @@ public interface Methods {
 
     @POST("/api/user/online")
     Call<SetOnlineResponse> setUserOnline(@Body SetOnlineResponse online);
+
+    @POST("/api/message/send")
+    Call<MessageModel> sendMessage(@Body MessageModel message);
 }
