@@ -1,5 +1,6 @@
 package com.example.messanger;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,32 +55,29 @@ public class ChatActivity extends AppCompatActivity {
         UserEntity user = databaseAdapter.getEntity();
         databaseAdapter.close();
 
-        // get chat messages
-        Call<ArrayList<MessageModel>> call = APIController.getMessages(user);
-        call.enqueue(new Callback<ArrayList<MessageModel>>() {
-            @Override
-            public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
-                ArrayList<MessageModel> data = response.body();
-
-                if(data != null) {
-                    for(MessageModel message : data) {
-                        messages.add(message);
-                    }
-                    updateMessages();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<MessageModel>> call, Throwable t) {
-                Log.e("ERROR", "onFailure: " + t.getMessage());
-            }
-        });
+//        renewMessages(user);
 
         messagesRecycler = findViewById(R.id.messagesRecycler);
         messagesRecycler.setLayoutManager(new LinearLayoutManager(this));
+//        messagesRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//
+//                if (!recyclerView.canScrollVertically(1)) {
+//                    Log.d("SCROLLER",  "END");
+//                }
+//            }
+//        });
 
         DataAdapter adapter = new DataAdapter(this, messages);
         messagesRecycler.setAdapter(adapter);
+
+        // first messages load
+        renewMessages(user);
+
+        // start message updater
+        startMessagesUpdater(user);
     }
 
     @Override
@@ -113,7 +112,53 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    public void startMessagesUpdater(UserEntity user) {
+        final Handler handler = new Handler();
+        Runnable refresh = new Runnable() {
+            @Override
+            public void run() {
+                renewMessages(user);
+                startMessagesUpdater(user);
+            }
+        };
+        handler.postDelayed(refresh, 5000);
+    }
+
+    public void renewMessages(UserEntity user) {
+        // get chat messages
+        Call<ArrayList<MessageModel>> call = APIController.getMessages(user);
+        call.enqueue(new Callback<ArrayList<MessageModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<MessageModel>> call, Response<ArrayList<MessageModel>> response) {
+                ArrayList<MessageModel> data = response.body();
+
+                if(data != null) {
+                    messages.clear();
+                    for(MessageModel message : data) {
+                        messages.add(message);
+                    }
+
+//                    Log.d("TAG", String.valueOf(messagesRecycler.canScrollVertically(1)));
+                    if(messagesRecycler.canScrollVertically(1)) {
+                        updateMessages();
+                    } else {
+                        updateMessagesWithScroll();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<MessageModel>> call, Throwable t) {
+                Log.e("ERROR", "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
     public void updateMessages() {
+        messagesRecycler.getAdapter().notifyDataSetChanged();
+    }
+
+    public void updateMessagesWithScroll() {
         messagesRecycler.getAdapter().notifyDataSetChanged();
         messagesRecycler.smoothScrollToPosition(messages.size());
     }
@@ -139,13 +184,8 @@ public class ChatActivity extends AppCompatActivity {
             public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                 MessageModel data = response.body();
 
-//                if(data != null) {
-//                    messages.add(data);
-//                    updateMessages();
-//                }
-
                 messages.add(newMessage);
-                updateMessages();
+                updateMessagesWithScroll();
             }
 
             @Override
